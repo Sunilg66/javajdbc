@@ -14,7 +14,7 @@ public class UpdateDescriptionByName {
 		String url = "jdbc:mysql://localhost:3306/april_transformers";
 
 		try (Connection cn = DriverManager.getConnection(url, username, password)) {
-			String updateDescriptionByName = "update scam set s_description='The army recruitment scam was basically about clearing temporarily rejected candidates of the army by fraudulently passing them in the medical review. Havildar Rajesh Kumar, who was one of the accused army personnel used to compile a full list .' where s_name='Recruitment Scam'";
+			String updateDescriptionByName = "update scam set s_description='In the early years, IPL enforced strict guidelines to the media for covering matches. It had to be consistent with a model mimicking North America in terms of media coverage. For example, there was a restriction to use images taken during the event unless purchased and the prohibition of live coverage from the cricket grounds..' where s_name='IPL Scam'";
 			Statement st = cn.createStatement();
 			st.execute(updateDescriptionByName);
 		} catch (SQLException e) {

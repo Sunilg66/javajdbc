@@ -14,7 +14,7 @@ public class UpdateScamByMultipleFields {
 		String url = "jdbc:mysql://localhost:3306/april_transformers";
 
 		try (Connection cn = DriverManager.getConnection(url, username, password)) {
-			String updateScamByMultipleFields = "update scam set s_year=2020,s_amount=1900,s_location='Chennai',s_type='GST' where s_name='INX Media' and s_id=17";
+			String updateScamByMultipleFields = "update scam set s_year=2020,s_amountincrores=5426,s_location='Panajim',s_type='GST' where s_name='INX Media' and s_id=14";
 			Statement st = cn.createStatement();
 			st.execute(updateScamByMultipleFields);
 		} catch (SQLException e) {

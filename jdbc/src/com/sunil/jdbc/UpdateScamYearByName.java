@@ -15,7 +15,7 @@ public class UpdateScamYearByName {
 
 		try (Connection conn = DriverManager.getConnection(url, username, password)) {
 
-			String updateYearByName = "update scam set s_year=2011 where s_name='2G Specturm Scam'";
+			String updateYearByName = "update scam set s_year=2014 where s_name='2G Spectrum Scam'";
 			Statement st = conn.createStatement();
 			st.execute(updateYearByName);
 		} catch (SQLException e) {
