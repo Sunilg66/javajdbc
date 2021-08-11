@@ -6,21 +6,29 @@ import com.sunil.jdbc.constants.RestaurantType;
 
 public class RestaurantDTO implements Serializable {
 
-	private int id;
+	
 	private String name;
 	private String location;
 	private String specialFood;
 	private boolean best;
 	private RestaurantType type;
+	private int id;
 
 	public RestaurantDTO() {
 		// TODO Auto-generated constructor stub
 	}
+    
+	public RestaurantDTO( String name, String location, String specialFood, boolean best,
+			RestaurantType type,int id) {
+		this.id=id;
+		
+	}
+
 
 	public RestaurantDTO( String name, String location, String specialFood, boolean best,
 			RestaurantType type) {
 		super();
-		this.id = id;
+		
 		this.name = name;
 		this.location = location;
 		this.specialFood = specialFood;
@@ -30,7 +38,7 @@ public class RestaurantDTO implements Serializable {
 
 	@Override
 	public String toString() {
-		return "RestaurantDTO [id=" + id + ", name=" + name + ", location=" + location + ", specialFood=" + specialFood
+		return "RestaurantDTO [ name=" + name + ", location=" + location + ", specialFood=" + specialFood
 				+ ", best=" + best + ", type=" + type + "]";
 	}
 
@@ -64,13 +72,9 @@ public class RestaurantDTO implements Serializable {
 			return false;
 		return true;
 	}
-
-	public int getId() {
+	
+	public int setId(int id) {
 		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public String getName() {

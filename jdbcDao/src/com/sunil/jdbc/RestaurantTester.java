@@ -9,7 +9,7 @@ public class RestaurantTester {
 
 	public static void main(String[] args) {
 		
-		RestaurantDTO dto = new RestaurantDTO("SiriVennala","DakshinKannada","vegBiriyani",true,RestaurantType.FAMILY);
+		RestaurantDTO dto = new RestaurantDTO("Jetlag","SoapFactory","Biriyani",false,RestaurantType.BAR);
 		
 		RestaurantDAO dao = new RestaurantDAOImpl();
 		dao.save(dto);
