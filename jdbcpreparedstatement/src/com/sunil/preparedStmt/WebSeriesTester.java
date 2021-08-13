@@ -2,6 +2,7 @@ package com.sunil.preparedStmt;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
 import com.sunil.preparedStmt.constants.Genre;
 import com.sunil.preparedStmt.constants.StreamedIn;
@@ -13,6 +14,8 @@ public class WebSeriesTester {
 	
 
 	public static void main(String[] args) {
+		
+		Collection<WebSeriesDTO> coll = new ArrayList<WebSeriesDTO>();
 		
 		WebSeriesDTO dto=new WebSeriesDTO("Seetha Vallaba",722,2,StreamedIn.ZEEKANNADA,Genre.FAMILY,18);
 		
@@ -33,7 +36,20 @@ public class WebSeriesTester {
 		
 		Collection<WebSeriesDTO> set = dao.findAllSortByNameDesc();
 		set.forEach(m->System.out.println(m));
-
+		
+		Optional<WebSeriesDTO> one=dao.findOne(g->g.getName().equals("Seetha Vallaba"));
+		if(one.isPresent()) {
+			WebSeriesDTO  optional=one.get();
+			System.out.println(optional);
+		}
+		
+		Collection<WebSeriesDTO> pre=dao.findAll(m->m.getNoOfEpisodes()>250);
+		pre.forEach(k->System.out.println(k));
+		
+		
+		Collection<WebSeriesDTO> saveall = dao.saveAll(coll);
+		System.out.println(saveall);
 	}
+	 
 
 }
