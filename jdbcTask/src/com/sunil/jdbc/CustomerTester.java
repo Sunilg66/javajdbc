@@ -19,34 +19,47 @@ public class CustomerTester {
 		CustomerDTO dto1 = new CustomerDTO("Sai", "Chikmagalur", "Udupi", "#665 Mulki", "false", "mg5298jsb15",
 				Education.MTECH);
 
-		CustomerDTO dto2 = new CustomerDTO("Akhil", "Mysore", "Mangalore", "#35 Kunjibettu", "false", "gr6425ks35",
+		CustomerDTO dto2 = new CustomerDTO("vivek", "Dharwad", "Bangalore", "#10 dharwad", "false", "kl9485mk91",
 				Education.BSC);
+		
 
 		CustomerService cs = new CustomerServiceImpl();
 		cs.validateAndSave(dto);
 		cs.validateAndSave(dto1);
 		cs.validateAndSave(dto2);
-
+		
+		System.out.println("######################SAVE ALL#############################");
+		
 		Collection<CustomerDTO> cl = Arrays.asList(dto, dto1, dto2);
 		cs.validateAndSaveAll(cl);
-
+		
+		System.out.println(" #######################FIND ONE############################");
 		Optional<CustomerDTO> findOne = cs.findOne(o -> o.getName().equalsIgnoreCase("sunil"));
 		if (findOne.isPresent()) {
 			CustomerDTO name = findOne.get();
 			System.out.println(name);
 		}
 
+		System.out.println("####################FIND ALL COLLECTION#######################");
+		
 		Collection<CustomerDTO> findAll = cs.findAll();
 		findAll.forEach(a -> System.out.println(a));
-
+		
+		System.out.println("#################FIND ALL PREDICATE###########################");
+		
 		Collection<CustomerDTO> findall = cs.findAll(s -> s.getFrom().endsWith("e"));
 		findall.forEach(s -> System.out.println(s));
-
+		
+		System.out.println("##################### NAME DESC ##############################");
+		
 		Collection<CustomerDTO> nameDesc = cs.findAllSortByNameDesc();
 		nameDesc.forEach(n -> System.out.println(n));
-
+		
+		System.out.println("#######################TOTAL############################");
+		
 		int total = cs.total();
 		System.out.println(total);
+		
 
 	}
 
