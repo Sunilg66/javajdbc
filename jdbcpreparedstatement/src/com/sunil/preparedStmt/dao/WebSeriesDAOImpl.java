@@ -30,23 +30,20 @@ public class WebSeriesDAOImpl implements WebSeriesDAO {
 			connection.setAutoCommit(false);
 			String query = "insert into webseries(w_name,w_noOfEpisodes,w_totalSeason,w_streamedIn, w_genre,w_yestAgeIndaNodbahudu)VALUES (?, ?, ?, ?, ?, ?)";
 			PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
-			ResultSet resultSet = statement.getGeneratedKeys();
 			statement.setString(1, dto.getName());
 			statement.setInt(2, dto.getNoOfEpisodes());
 			statement.setInt(3, dto.getTotalSeason());
 			statement.setString(4, dto.getType().toString());
 			statement.setString(5, dto.getGenre().toString());
 			statement.setInt(6, dto.getYestAgeIndaNodbahudu());
+			statement.execute();
+			ResultSet resultSet = statement.getGeneratedKeys();
 			if (resultSet.next()) {
 				aiId = resultSet.getInt(1);
-				System.out.println(aiId);
-
 			}
-			System.out.println(aiId);
 			dto.setId(aiId);
 			statement.execute();
 			connection.commit();
-			System.out.println(dto);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			try {
@@ -83,9 +80,9 @@ public class WebSeriesDAOImpl implements WebSeriesDAO {
 	public int total() {
 		int count = 0;
 		try (Connection connect = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
-			String query = "select count(*) from WebSeries";
+			String query = "select count(w_id) from WebSeries";
 			ResultSet set = createdFromPreparedStatement(connect, query);
-			while (set.next()) {
+			if (set.next()) {
 				count = set.getInt(1);
 			}
 			System.out.println("Total : " + count);
@@ -140,7 +137,7 @@ public class WebSeriesDAOImpl implements WebSeriesDAO {
 
 	@Override
 	public Collection<WebSeriesDTO> findAllSortByNameDesc() {
-		Collection cl = new ArrayList();
+		Collection<WebSeriesDTO> cl = new ArrayList<WebSeriesDTO>();
 		try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
 			String query = "select * from webseries order by w_name desc";
 			PreparedStatement ps = conn.prepareStatement(query);
@@ -148,8 +145,9 @@ public class WebSeriesDAOImpl implements WebSeriesDAO {
 			while (resultSet.next()) {
 				WebSeriesDTO ws = createValuesFromResultSet(resultSet);
 				cl.add(ws);
-
+				System.out.println("desceinding order : " + ws);
 			}
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -219,37 +217,39 @@ public class WebSeriesDAOImpl implements WebSeriesDAO {
 	}
 
 	@Override
-	public Collection<WebSeriesDTO> saveAll(Collection<WebSeriesDTO> collection) {
-		Collection<WebSeriesDTO> list = new ArrayList<WebSeriesDTO>();
-		Connection tempcon = null;
+	public void saveAll(Collection<WebSeriesDTO> collection) {
+
+		Connection tempconnection = null;
 		try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
+			tempconnection = connection;
+			connection.setAutoCommit(false);
+			String query = "insert into webseries(w_name,w_noOfEpisodes,w_totalSeason,w_streamedIn, w_genre,w_yestAgeIndaNodbahudu)VALUES (?, ?, ?, ?, ?, ?)";
+			PreparedStatement ps = connection.prepareStatement(query);
+			collection.forEach(dto -> {
+				try {
+					ps.setString(1, dto.getName());
+					ps.setInt(2, dto.getNoOfEpisodes());
+					ps.setInt(3, dto.getTotalSeason());
+					ps.setString(4, dto.getType().toString());
+					ps.setString(5, dto.getGenre().toString());
+					ps.setInt(6, dto.getYestAgeIndaNodbahudu());
+					ps.execute();
+					System.out.println(dto);
+				} catch (SQLException e) {
 
-			tempcon = connection;
-
-			String query = "insert into webseries(w_name,w_noOfEpisodes,w_totalSeason,w_streamedIn,w_gener,w_yestAgeIndaNodbahudu) values (?,,?,?,?,?,?)";
-			PreparedStatement stm = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
-			ResultSet resultSet = stm.executeQuery();
-			
-			while (resultSet.next()) {
-				int id = resultSet.getInt("w_id");
-				String name = resultSet.getString("w_name");
-				int w_noOfEpisodes = resultSet.getInt("w_noOfEpisodes");
-				int w_season = resultSet.getInt("w_totalSeason");
-				String w_streamedIn = resultSet.getString("w_+streamedIn");
-				String w_gener = resultSet.getString("w_genre");
-				int w_yestAgeIndaNodbohudu = resultSet.getInt("w_yestAgeIndaNodbahudu");
-				WebSeriesDTO dto1 = new WebSeriesDTO(name, w_noOfEpisodes, w_season, StreamedIn.valueOf(w_streamedIn),
-						Genre.valueOf(w_gener), w_yestAgeIndaNodbohudu);
-				dto1.setId(id);
-				collection.add(dto1);
-			}
-
+					e.printStackTrace();
+				}
+			});
+			connection.commit();
 		} catch (SQLException e) {
-
 			e.printStackTrace();
-
+			try {
+				tempconnection.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 		}
 
-		return collection;
 	}
+
 }

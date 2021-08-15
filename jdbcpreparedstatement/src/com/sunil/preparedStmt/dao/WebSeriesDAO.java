@@ -24,6 +24,9 @@ public interface WebSeriesDAO {
 	
 	Collection<WebSeriesDTO> findAll(Predicate<WebSeriesDTO> predicate);
 	
-	Collection<WebSeriesDTO> saveAll(Collection<WebSeriesDTO> collection);
+	void saveAll(Collection<WebSeriesDTO> collection);
+	
+	
+	
 
 }
