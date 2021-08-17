@@ -102,8 +102,11 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public void validateAndSaveAll(Collection<CustomerDTO> collection) {
-
-		dao.saveAll(collection);
+		if (!collection.isEmpty()) {
+			collection.forEach(dto -> {
+				this.validateAndSave(dto);
+			});
+		}
 
 	}
 

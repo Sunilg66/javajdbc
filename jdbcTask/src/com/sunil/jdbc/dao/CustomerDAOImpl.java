@@ -36,6 +36,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 				tempResult = result.getInt(1);
 				System.out.println(tempResult);
 			}
+			dto.setId(tempResult);
 			connection.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -61,30 +62,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 	@Override
 	public void saveAll(Collection<CustomerDTO> collection) {
-
-		Connection temp = null;
-		try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
-			temp = connection;
-			connection.setAutoCommit(false);
-			String query = "insert into customer(c_name,c_from,c_to,c_address,c_married,c_passportNo,c_education)values(?,?,?,?,?,?,?)";
-			PreparedStatement prepare = connection.prepareStatement(query);
-			collection.forEach(s -> {
-				try {
-					createFromPrepareStatement(s, prepare);
-					System.out.println(s);
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			});
-			connection.commit();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-			try {
-				temp.rollback();
-			} catch (SQLException e2) {
-				e2.printStackTrace();
-			}
-		}
+        collection.stream().forEach(dto-> save(dto));
 	}
 
 	@Override
