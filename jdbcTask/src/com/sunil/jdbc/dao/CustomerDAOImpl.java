@@ -29,14 +29,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 			String query = "insert into customer(c_name,c_from,c_to,c_address,c_married,c_passportNo,c_education)values(?,?,?,?,?,?,?)";
 			PreparedStatement prepare = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
-			prepare.setString(1, dto.getName());
-			prepare.setString(2, dto.getFrom());
-			prepare.setString(3, dto.getTo());
-			prepare.setString(4, dto.getAddress());
-			prepare.setString(5, dto.getMarried());
-			prepare.setString(6, dto.getPassportNo());
-			prepare.setString(7, dto.getEdu().toString());
-			prepare.execute();
+			createFromPrepareStatement(dto, prepare);
 			ResultSet result = prepare.getGeneratedKeys();
 
 			if (result.next()) {
@@ -55,6 +48,17 @@ public class CustomerDAOImpl implements CustomerDAO {
 		return tempResult;
 	}
 
+	private void createFromPrepareStatement(CustomerDTO dto, PreparedStatement prepare) throws SQLException {
+		prepare.setString(1, dto.getName());
+		prepare.setString(2, dto.getFrom());
+		prepare.setString(3, dto.getTo());
+		prepare.setString(4, dto.getAddress());
+		prepare.setString(5, dto.getMarried());
+		prepare.setString(6, dto.getPassportNo());
+		prepare.setString(7, dto.getEdu().toString());
+		prepare.execute();
+	}
+
 	@Override
 	public void saveAll(Collection<CustomerDTO> collection) {
 
@@ -66,14 +70,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 			PreparedStatement prepare = connection.prepareStatement(query);
 			collection.forEach(s -> {
 				try {
-					prepare.setString(1, s.getName());
-					prepare.setString(2, s.getFrom());
-					prepare.setString(3, s.getTo());
-					prepare.setString(4, s.getAddress());
-					prepare.setString(5, s.getMarried());
-					prepare.setString(6, s.getPassportNo());
-					prepare.setString(7, s.getEdu().toString());
-					prepare.execute();
+					createFromPrepareStatement(s, prepare);
 					System.out.println(s);
 				} catch (SQLException e) {
 					e.printStackTrace();
@@ -175,7 +172,9 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 			while (set.next()) {
 				CustomerDTO dto = createValuesFromResultSet(set);
-				collection.add(dto);
+				if(predicate.test(dto)) {
+					collection.add(dto);
+				}
 
 			}
 		} catch (SQLException e) {

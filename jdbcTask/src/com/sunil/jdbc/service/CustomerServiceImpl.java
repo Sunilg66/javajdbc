@@ -88,6 +88,7 @@ public class CustomerServiceImpl implements CustomerService {
 				educationValid = false;
 			}
 			if (nameValid && fromValid && toValid && addressValid && marriedValid && passportValid && educationValid) {
+				dao.save(dto);
 				System.out.println("data is valid");
 				return 1;
 			}
